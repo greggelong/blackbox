@@ -6,7 +6,7 @@ let atoms = [];
 let cnv;
 let lx, ly;
 let guang = false;
-let intheata = 90;
+let intheta = 90;
 let laser;
 
 function setup() {
@@ -17,7 +17,7 @@ function setup() {
   cnv.position(cx, cy);
   background(255, 255, 0);
   board = twoDarr(rows, cols, 0); //set up board
-  placeAtoms(40); // set up atoms
+  placeAtoms(60); // set up atoms
   laser = createVector(0, 0);
 }
 
@@ -69,12 +69,12 @@ function placeAtoms(numofatoms) {
     if (!atoms.includes(na)) {
       board[ry][rx] = 1; // one is the attom
       atoms.push(na);
-      print(na, rx, ry);
+      //print(na, rx, ry);
     } else {
       print("bang");
     }
   }
-  print(atoms);
+  //print(atoms);
 }
 
 // laser from top
@@ -105,29 +105,59 @@ function laserTop() {
 }
 
 function laserTurtle() {
-  print(guang);
+  //print(guang);
+  //top
+  print(intheta);
   if (!guang) {
     laser.x = floor(random(cols));
-    laser.y = 0;
+    laser.y = 1;
     guang = true;
     board[laser.y][laser.x] = 2;
   } else {
-    if (laser.y < rows - 1) {
-      if (board[laser.y + 1][laser.x + 1] == 1) right();
+    if (inBounds(laser.x, laser.y)) {
+      // turn right atom on left
+      if (intheta == 90 && board[laser.y + 1][laser.x - 1] == 1) {
+        right();
+      }
+      if (intheta == 0 && board[laser.y - 1][laser.x + 1] == 1) {
+        right();
+      }
+      if (intheta == 0 && board[laser.y + 1][laser.x + 1] == 1) {
+        left();
+      }
+      //turn left
+      if (intheta == 90 && board[laser.y + 1][laser.x + 1] == 1) {
+        left();
+      }
+      if (intheta == 180 && board[laser.y + 1][laser.x - 1] == 1) {
+        left();
+      }
+      if (intheta == 180 && board[laser.y - 1][laser.x - 1] == 1) {
+        right();
+      }
+      // absorbe
+      if (board[laser.y + 1][laser.x] == 1) {
+        resetlaser();
+      }
       forward();
 
       board[laser.y][laser.x] = 2;
-      print(laser);
+      //print(laser);
     } else {
-      guang = false;
-      laser.y = 0;
+      resetlaser();
     }
   }
 }
 
+function resetlaser() {
+  guang = false;
+  laser.y = 1;
+  intheta = 90;
+}
+
 function forward() {
-  let x2 = laser.x + 1 * cos(intheata);
-  let y2 = laser.y + 1 * sin(intheata);
+  let x2 = laser.x + 1 * cos(intheta);
+  let y2 = laser.y + 1 * sin(intheta);
 
   // the math works out and divides evenly only need to recast as ints
 
@@ -138,8 +168,8 @@ function forward() {
 }
 
 function right() {
-  intheata -= 90;
-  intheata = intheata % 360;
+  intheta -= 90;
+  intheta = intheta % 360;
 }
 
 function left() {
@@ -150,3 +180,7 @@ function left() {
 /// if out of bounds like sand
 /// if inter act with
 //
+
+function inBounds(x, y) {
+  return x >= 1 && y >= 1 && x < cols - 1 && y < rows - 1; // rows not height
+}
