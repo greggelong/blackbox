@@ -3,9 +3,13 @@ let sz = 10;
 let rows = 80;
 let cols = 80;
 let atoms = [];
+let cnv 
 
 function setup() {
-  createCanvas(1000, 1000);
+  cnv =createCanvas(1000, 1000);
+  let cx = (windowWidth - cnv.width)/2
+  let cy = (windowHeight - cnv.height)/2
+  cnv.position(cx, cy)
   background(255, 255, 0);
   board = twoDarr(rows, cols, 0);
 
