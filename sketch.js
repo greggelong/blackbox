@@ -11,21 +11,11 @@ function setup() {
   let cy = (windowHeight - cnv.height)/2
   cnv.position(cx, cy)
   background(255, 255, 0);
-  board = twoDarr(rows, cols, 0);
-
-  while (atoms.length < 40) {
-    let rx = floor(random(cols));
-    let ry = floor(random(rows));
-    let na = str(rx) + str(ry);
-    if (!atoms.includes(na)) {
-      board[ry][rx] = 3;
-      atoms.push(na);
-      print(na, rx, ry);
-    } else {
-      print("bang");
-    }
-  }
-  print(atoms);
+  board = twoDarr(rows, cols, 0); //set up board
+  placeAtoms(40); // set up atoms
+  
+  
+   
 }
 
 function draw() {
@@ -55,17 +45,32 @@ function showGrid() {
     for (let i = 0; i < cols; i++) {
       // set color
       if (board[j][i] == 1) {
-        fill(255, 150, 50); // sand
-      } else if (board[j][i] == 2) {
+        fill(255,0,0); // sand
+      } else if (board[j][i] > 1) {
         fill(10, 140, 250); // water
-      } else if (board[j][i] == 3) {
-        //fill(170, 163, 163); // rock
-        fill(255, 0, 0);
-      } else {
+      }  else {
         fill(0); // empty
       }
 
       rect(i * sz, j * sz, sz, sz); // whoops!! this is standard x, y
     }
   }
+}
+
+
+function placeAtoms(numofatoms){
+  atoms = []  // clear the array
+  while (atoms.length < numofatoms) {
+    let rx = floor(random(cols));
+    let ry = floor(random(rows));
+    let na = str(rx) + str(ry);
+    if (!atoms.includes(na)) {
+      board[ry][rx] = 1; // one is the attom
+      atoms.push(na);
+      print(na, rx, ry);
+    } else {
+      print("bang");
+    }
+  }
+  print(atoms);
 }
