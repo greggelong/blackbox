@@ -11,6 +11,7 @@ let laser;
 
 function setup() {
   angleMode(DEGREES);
+  pixelDensity(1);
   cnv = createCanvas(1000, 1000);
   let cx = (windowWidth - cnv.width) / 2;
   let cy = (windowHeight - cnv.height) / 2;
